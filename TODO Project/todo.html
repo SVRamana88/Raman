@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head><title>TODO LIST PROJECT</title></head>
+<body>
+    <input id='inputid1' type="text"/>
+    <input id='inputid2' type="date"/>
+    <button id = 'addid' onclick="addtodo()">add</button>
+    <div id="divid"></div>
+    
+    <script>
+
+        // MODEL
+        //save date
+        let ar;
+        let savedtodos = JSON.parse(localStorage.getItem('todoskey'))
+        if (Array.isArray(savedtodos)) 
+            ar = savedtodos
+        else
+            ar = [{title: "work out" ,date : '2022-10-12',id : 'id1'},{title: "fresh up", date : '2022-10-12', id : 'id2'}]
+            render();
+        //storing data in local as string
+        function savetodoinlocalstorage() {
+            localStorage.setItem('todoskey' , JSON.stringify(ar))
+        }
+        
+        //add todo data
+        function createtodo() {
+            const rid = '' + new Date().getTime()  //id is int >> string( '' + id)
+            ar.push({title: element1, date : element2 , id : rid }) 
+            render()
+            savetodoinlocalstorage()
+        }
+        //remove todo data
+        function remove (idtodelete) {
+            ar = ar.filter(function(i) {
+                if (idtodelete === i.id)   // === >> for comparison in js
+                    return false
+                else
+                    return true
+            })
+            render()
+            savetodoinlocalstorage()
+        }
+
+        //VIEW
+        function render() {
+            document.getElementById("divid").innerHTML = '';
+            ar.forEach(function(i) {
+            let element = document.getElementById("divid")
+            let indivele = document.createElement('div')
+            indivele.innerText = i.title + '   ' + i.date
+            let buttonele = document.createElement('button')  // delete button
+            buttonele.innerText = 'delete';
+            buttonele.style = ' margin-left : 12px; '
+            buttonele.id = i.id; //id given to button
+            buttonele.onclick = deletetodo; // to delete to todo
+            indivele.appendChild(buttonele) 
+            element.appendChild(indivele) // append to main div
+            })
+        }   
+
+        //CONTROLER
+        //addtodo
+        function addtodo()  {
+            let input1element = document.getElementById("inputid1")
+            element1 = input1element.value;
+            let input2element = document.getElementById("inputid2")
+            element2 = input2element.value;  /////////////////
+            createtodo(element1,element2);
+        }
+        //deletetodo
+        function deletetodo(event) {
+            const deletebutton = event.target; //<button id="id1" style="margin-left: 12px;">delete</button>
+            const idtodelete = deletebutton.id; //id1  
+            remove(idtodelete);
+        }
+
+    </script>
+    
+</body>
+</html>
